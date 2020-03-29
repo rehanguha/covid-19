@@ -1,0 +1,48 @@
+<html>
+    <head>
+        <!-- Load plotly.js into the DOM -->
+        <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+    </head>
+    
+    <body>
+        <center>
+            <h1>COVID-19 Data Visialization Dashboard</h1>
+<h4>Data Source: <a href="https://github.com/CSSEGISandData/COVID-19">CSSEGISandData/COVID-19</a></h4>
+
+    </center>
+        <hr>
+        <div id='worldmap_confirmed_data'><!-- Plotly chart will be drawn inside this DIV --></div>
+        <hr>
+
+        <div id='worldmap_deaths_data'><!-- Plotly chart will be drawn inside this DIV --></div>
+        <hr>
+
+        <div id='worldmap_recovered_data'><!-- Plotly chart will be drawn inside this DIV --></div>
+        <hr>
+
+        <center>
+            <div id="timeseries">
+                <div class="timeseries" data-num="0">
+                    <div class="control-row" style="align-items: center;">
+                        <hr>
+
+                        <h2>Country: <select class="countrydata"></select></h2>
+                        <hr>
+                        <hr>
+
+                  <div class="plot" id="country_timeseries"></div>
+    
+                  </div>
+                </div>
+              </div>
+
+        </center>
+        
+
+    </body>
+    
+    <script src='js/worldmap.js'></script>
+    <script src='js/timeline.js'></script>
+    <script src='js/main.js'></script>
+
+</html>
