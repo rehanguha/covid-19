@@ -27,14 +27,14 @@ fetch("https://pomber.github.io/covid19/timeseries.json")
 
       };
 
-        setBubblePlot('Afghanistan');
+        setCountryViz('Afghanistan');
 
-        function setBubblePlot(chosenCountry) {
+        function setCountryViz(chosenCountry) {
             getCountryData(chosenCountry);  
         
             var trace1 = {
                 type: "scatter",
-                mode: "lines",
+                mode: "lines+markers",
                 name: 'Deaths',
                 x: date,
                 y: deaths,
@@ -43,7 +43,7 @@ fetch("https://pomber.github.io/covid19/timeseries.json")
               
               var trace2 = {
                 type: "scatter",
-                mode: "lines",
+                mode: "lines+markers",
                 name: 'Recovered',
                 x: date,
                 y: recovered,
@@ -52,7 +52,7 @@ fetch("https://pomber.github.io/covid19/timeseries.json")
         
               var trace3 = {
                 type: "scatter",
-                mode:  "lines",
+                mode:  "lines+markers",
                 name: 'Confirmed',
                 x: date,
                 y: confirmed,
@@ -93,6 +93,87 @@ fetch("https://pomber.github.io/covid19/timeseries.json")
               
               
               Plotly.newPlot('country_timeseries', timeseries_data, layout);
+
+
+
+              var gauge = [
+
+                {
+                  type: "indicator",
+                  mode: "number+delta",
+                  value: confirmed[confirmed.length-1]-recovered[recovered.length-1]-deaths[deaths.length-1],
+                  domain: { row: 0, column: 0 },
+                  delta: { reference: confirmed[confirmed.length-2]-recovered[recovered.length-2]-deaths[deaths.length-2] },
+                  title: { text: "Active Cases" },
+                },
+                {
+                    type: "indicator",
+                    mode: "number+delta",
+                    value: confirmed[confirmed.length-1],
+                    domain: { row: 0, column: 1 },
+                    delta: { reference: confirmed[confirmed.length-2] },
+                    title: { text: "Confirmed" },
+                  },
+                  {
+                    type: "indicator",
+                    mode: "number+delta",
+                    value: deaths[deaths.length-1],
+                    domain: { row: 1, column: 0 },
+                    delta: { reference: deaths[deaths.length-2] },
+                    title: { text: "Deaths" },
+                  },
+                  {
+                    type: "indicator",
+                    mode: "number+delta",
+                    value: recovered[recovered.length-1],
+                    domain: { row: 1, column: 1 },
+                    delta: { reference: recovered[recovered.length-2] },
+                    title: { text: "Recovered" },
+                  },
+
+              ];
+              
+              var layout = {
+                width: 500,
+                height: 400,
+                margin: { t: 25, b: 25, l: 25, r: 25 },
+                grid: { rows: 2, columns: 2, pattern: "independent" },
+                template: {
+                  data: {
+                    indicator: [
+                      {
+                        
+                        mode: "number+delta+gauge",
+
+                      }
+                    ]
+                  }
+                }
+              };
+              
+              Plotly.newPlot('country_gauge', gauge, layout);
+
+
+
+
+
+
+              var country_piechart = [{
+                values: [confirmed[confirmed.length-1]-recovered[recovered.length-1]-deaths[deaths.length-1], recovered[recovered.length-1], deaths[deaths.length-1]],
+                labels: ['Active Cases', 'Recovered', 'Deaths'],
+                type: 'pie',
+                textinfo: "label+percent",
+            }];
+            
+            var layout = {
+                height: 400,
+                width: 500
+            };
+            
+            Plotly.newPlot('country_piechart', country_piechart, layout);
+
+
+
         };
 
         var innerContainer = document.querySelector('[data-num="0"'),
@@ -110,11 +191,11 @@ fetch("https://pomber.github.io/covid19/timeseries.json")
     assignOptions(loc, countrySelector);
     
     function updateCountry(){
-        setBubblePlot(countrySelector.value);
+        setCountryViz(countrySelector.value);
+
     }
       
     countrySelector.addEventListener('change', updateCountry, false);
 
-      
 
 });
