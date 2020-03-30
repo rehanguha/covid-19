@@ -142,9 +142,7 @@ fetch("https://pomber.github.io/covid19/timeseries.json")
                   data: {
                     indicator: [
                       {
-                        
                         mode: "number+delta+gauge",
-
                       }
                     ]
                   }
