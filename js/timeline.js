@@ -2,6 +2,7 @@ var timeline
 var deaths = [];
 var confirmed = [];
 var recovered = [];
+var active = [];
 var date = [];
 var today = new Date();
 var today = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
@@ -14,6 +15,7 @@ fetch("https://pomber.github.io/covid19/timeseries.json")
         deaths = [];
         confirmed = [];
         recovered = [];
+        active = [];
         date = [];
 
         timeline = data[chosenCountry];
@@ -23,6 +25,7 @@ fetch("https://pomber.github.io/covid19/timeseries.json")
             confirmed.push(timeline[i]["confirmed"]);
             recovered.push(timeline[i]["recovered"]);
             deaths.push(timeline[i]["deaths"]);
+            active.push(timeline[i]["confirmed"] - timeline[i]["recovered"] - timeline[i]["deaths"])
         };
 
       };
@@ -56,10 +59,19 @@ fetch("https://pomber.github.io/covid19/timeseries.json")
                 name: 'Confirmed',
                 x: date,
                 y: confirmed,
+                line: {color: '#dbd816'}
+              }
+
+              var trace4 = {
+                type: "scatter",
+                mode:  "lines+markers",
+                name: 'Active',
+                x: date,
+                y: active,
                 line: {color: '#1754cf'}
               }
               
-              var timeseries_data = [trace1,trace2, trace3];
+              var timeseries_data = [trace1,trace2, trace3, trace4];
               
               var layout = {
                 title: 'Time Series of COVID-19 ('.concat(chosenCountry, ')'),
