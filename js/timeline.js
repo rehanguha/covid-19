@@ -3,6 +3,8 @@ var deaths = [];
 var confirmed = [];
 var recovered = [];
 var active = [];
+var death_rate = [];
+var recovery_rate = [];
 var date = [];
 var today = new Date();
 var today = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
@@ -16,6 +18,8 @@ fetch("https://pomber.github.io/covid19/timeseries.json")
         confirmed = [];
         recovered = [];
         active = [];
+        death_rate = [];
+        recovery_rate = [];
         date = [];
 
         timeline = data[chosenCountry];
@@ -26,6 +30,8 @@ fetch("https://pomber.github.io/covid19/timeseries.json")
             recovered.push(timeline[i]["recovered"]);
             deaths.push(timeline[i]["deaths"]);
             active.push(timeline[i]["confirmed"] - timeline[i]["recovered"] - timeline[i]["deaths"])
+            death_rate.push((timeline[i]["deaths"]/timeline[i]["confirmed"]) * 100.0)
+            recovery_rate.push((timeline[i]["recovered"]/timeline[i]["confirmed"]) * 100.0)
         };
 
       };
@@ -105,6 +111,61 @@ fetch("https://pomber.github.io/covid19/timeseries.json")
               
               
               Plotly.newPlot('country_timeseries', timeseries_data, layout);
+
+
+
+              var trace_rate1 = {
+                type: "scatter",
+                mode: "lines+markers",
+                name: 'Death Rate',
+                x: date,
+                y: death_rate,
+                line: {color: '#cf1717'}
+              }
+              
+              var trace_rate2 = {
+                type: "scatter",
+                mode: "lines+markers",
+                name: 'Recovery Rate',
+                x: date,
+                y: recovery_rate,
+                line: {color: '#20b812'}
+              }
+
+              var timeseries_rates = [trace_rate1, trace_rate2];
+              
+              var layout = {
+                title: 'Death/Recovery Rate for COVID-19 ('.concat(chosenCountry, ')'),
+                xaxis: {
+                  autorange: true,
+                  range: ['2020-1-22', today],
+                  rangeselector: {buttons: [
+                      {
+                        count: 1,
+                        label: '1w',
+                        step: 'week',
+                        stepmode: 'backward'
+                      },
+                      {
+                        count: 2,
+                        label: '6w',
+                        step: 'week',
+                        stepmode: 'backward'
+                      },
+                      {step: 'all'}
+                    ]},
+                  rangeslider: {range: ['2020-1-22', today]},
+                  type: 'date'
+                },
+                yaxis: {
+                  autorange: true,
+                  range: [86.8700008333, 138.870004167],
+                  type: 'linear'
+                }
+              };
+              
+              
+              Plotly.newPlot('country_rates', timeseries_rates, layout);
 
 
 
